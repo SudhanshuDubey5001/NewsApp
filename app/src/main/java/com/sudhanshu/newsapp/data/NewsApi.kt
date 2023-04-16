@@ -9,7 +9,7 @@ import retrofit2.http.Path
 
 interface NewsApi {
     @Headers("x-api-key: " + Util.APIKEY)
-    @GET(Util.endpoint_latest_headlines + "?lang=en&countries=UK")
+    @GET(Util.endpoint_latest_headlines + "?lang=en")
     suspend fun getDeafaultNews(): Response<NewsBase>
 
     @Headers("x-api-key: " + Util.APIKEY)

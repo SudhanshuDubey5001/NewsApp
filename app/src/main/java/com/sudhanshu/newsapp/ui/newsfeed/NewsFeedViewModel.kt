@@ -27,7 +27,7 @@ class NewsFeedViewModel @Inject constructor(
     val uiEvent = _uiEvent.asSharedFlow()
 
     init {
-        getLatestNews()
+//        getLatestNews()
     }
 
     fun onNewsFeedEvent(event: NewsFeedEvents) {

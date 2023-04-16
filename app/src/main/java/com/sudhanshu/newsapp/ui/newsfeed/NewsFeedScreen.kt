@@ -4,6 +4,7 @@ import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.material.icons.Icons
@@ -28,12 +29,30 @@ import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.launch
 
+
+data class newsTest(
+    val content: String,
+    val url: String,
+    val age: String,
+)
+
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun NewsFeedScreen(
     onNavigate: (UiEvent.navigate) -> Unit,
     viewModel: NewsFeedViewModel = hiltViewModel()
 ) {
+    //trial run--->
+    val newsTestList = listOf(
+        newsTest("You got your wife pregnant you son of a bitch",
+        "https://thumbs.dreamstime.com/b/environment-earth-day-hands-trees-growing-seedlings-bokeh-green-background-female-hand-holding-tree-nature-field-gra-130247647.jpg",
+        "1h ago"),
+        newsTest("You will achieve success if you keep your head down and keep moving",
+        "https://us.123rf.com/450wm/arthonmeekodong/arthonmeekodong2011/arthonmeekodong201100103/159303909-hand-holding-trees-on-blurred-green-nature-background-replacement-tree-planting-idea-deforestation.jpg?ver=6",
+        "2h ago"),
+    )
+
+
     val snackbarHostState = remember { SnackbarHostState() }
 
     //observing the changes---->
@@ -101,14 +120,21 @@ fun NewsFeedScreen(
             //news feed---------------------->
 
             LazyColumn(modifier = Modifier.fillMaxSize()) {
-                items(newsFeed.value) {
+                items(newsTestList) {
                     NewsFeeditem(
                         news = it,
-                        modifier = Modifier.clickable {
-                            viewModel.onNewsFeedEvent(NewsFeedEvents.OnNewsClick(it))
-                        })
-                }
+                        modifier = Modifier.padding(10.dp))
+//                        modifier = Modifier.clickable {
+//                            viewModel.onNewsFeedEvent(NewsFeedEvents.OnNewsClick(it))
+//                        })
+                    }
             }
         }
     }
+}
+
+@Preview
+@Composable
+fun PreviewView(){
+    NewsFeedScreen(onNavigate = { UiEvent.navigate ("")})
 }
