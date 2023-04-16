@@ -7,3 +7,4 @@ Technical details -
 2. Strictly based on MVVM architecture
 3. UI is developed using Jetpack Compose(Material 3)
 4. Used NewsCatcher API for fetching news database
+5. Used Dagger Hilt dependency injection 
