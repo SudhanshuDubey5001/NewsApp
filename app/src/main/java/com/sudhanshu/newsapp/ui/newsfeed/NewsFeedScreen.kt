@@ -38,6 +38,7 @@ import kotlinx.coroutines.launch
 @Composable
 fun NewsFeedScreen(
     onNavigate: (UiEvent.navigate) -> Unit,
+    drawerState: DrawerState,
     viewModel: NewsFeedViewModel = hiltViewModel()
 ) {
     //trial run--->
@@ -47,7 +48,7 @@ fun NewsFeedScreen(
             "2",
             "3",
             "4",
-            "","",""
+            "", "", ""
         ),
         newsTest(
             "You will achieve success if you keep your head down and keep moving",
@@ -61,7 +62,7 @@ fun NewsFeedScreen(
                     "Claire Durousseau, whose niece died in the crash, said the verdict was a severe blow to those left behind: \"Our lost ones have died a second time. I feel sick.\"\n" +
                     "It was the first trial for corporate involuntary manslaughter to be held in France.\n" +
                     "Air France and Airbus had always denied the charges, for which they were facing a maximum fine of €225,000 (£200,000; \$247,000).\n",
-             "https://us.123rf.com/450wm/arthonmeekodong/arthonmeekodong2011/arthonmeekodong201100103/159303909-hand-holding-trees-on-blurred-green-nature-background-replacement-tree-planting-idea-deforestation.jpg?ver=6",
+            "https://us.123rf.com/450wm/arthonmeekodong/arthonmeekodong2011/arthonmeekodong201100103/159303909-hand-holding-trees-on-blurred-green-nature-background-replacement-tree-planting-idea-deforestation.jpg?ver=6",
             "2h ago",
             "newstest item 2",
             "Sudhanshu Dubey",
@@ -104,9 +105,11 @@ fun NewsFeedScreen(
         }
     }
 
+
+    val scope = rememberCoroutineScope()
+
     Scaffold(modifier = Modifier.fillMaxSize()) {
         Column {
-
             //app bar--------------------------->
             CenterAlignedTopAppBar(
                 title = {
@@ -118,9 +121,15 @@ fun NewsFeedScreen(
                 navigationIcon = {
                     Icon(
                         imageVector = Icons.Default.List,
-                        contentDescription = "back arrow",
+                        contentDescription = "nav drawer",
                         tint = Color.White,
-                        modifier = Modifier.padding(start = 7.dp, 0.dp, 0.dp, 0.dp)
+                        modifier = Modifier
+                            .padding(start = 7.dp, 0.dp, 0.dp, 0.dp)
+                            .clickable {
+                                scope.launch {
+                                    drawerState.open()
+                                }
+                            }
                     )
                 },
                 colors = TopAppBarDefaults.topAppBarColors(
@@ -129,7 +138,7 @@ fun NewsFeedScreen(
                 ),
                 actions = {
                     IconButton(onClick = {
-                        viewModel.onNewsFeedEvent(NewsFeedEvents.OnSearchNewsClick)
+//                        viewModel.onNewsFeedEvent(NewsFeedEvents.OnSearchNewsClick)
                     }) {
                         Icon(
                             imageVector = Icons.Default.Search,
@@ -145,7 +154,8 @@ fun NewsFeedScreen(
                 items(newsTestList) {
                     NewsFeeditem(
                         news = it,
-                        modifier = Modifier.padding(10.dp)
+                        modifier = Modifier
+                            .padding(10.dp)
                             .clickable {
                                 viewModel.onNewsFeedEvent(NewsFeedEvents.OnNewsClick(it))
                             }
