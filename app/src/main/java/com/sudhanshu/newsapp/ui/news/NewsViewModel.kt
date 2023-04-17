@@ -1,14 +1,9 @@
 package com.sudhanshu.newsapp.ui.news
 
-import androidx.compose.runtime.MutableState
-import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.sudhanshu.newsapp.data.NewsApi
-import com.sudhanshu.newsapp.data.repository.News
-import com.sudhanshu.newsapp.data.repository.newsTest
-import com.sudhanshu.newsapp.ui.newsfeed.NewsFeedViewModel
 import com.sudhanshu.newsapp.util.UiEvent
 import com.sudhanshu.newsapp.util.Util
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -27,7 +22,7 @@ class NewsViewModel @Inject constructor(
     private val _uiEvent = MutableSharedFlow<UiEvent>()
     val uiEvent = _uiEvent.asSharedFlow()
 
-    val newsFlowObj = newsJSON?.let { Util.fromJson(it) }
+    val newsObj = newsJSON?.let { Util.fromJson(it) }
 
     fun OnNewsEvent(event: NewsEvent) {
         when (event) {

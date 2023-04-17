@@ -46,13 +46,26 @@ fun NewsFeedScreen(
             "1",
             "2",
             "3",
-            "4"
+            "4",
+            "","",""
         ),
         newsTest(
             "You will achieve success if you keep your head down and keep moving",
-            "https://us.123rf.com/450wm/arthonmeekodong/arthonmeekodong2011/arthonmeekodong201100103/159303909-hand-holding-trees-on-blurred-green-nature-background-replacement-tree-planting-idea-deforestation.jpg?ver=6",
+            "A French court has cleared Air France and Airbus of charges of involuntary manslaughter over a deadly crash in June 2009 which killed all 228 people on board.\n" +
+                    "The Airbus A330 operated by Air France stalled during a storm and plunged into the Atlantic Ocean.\n" +
+                    "The court said even if errors had been committed, a causal link between them and the crash could not be proved.\n" +
+                    "Families of the victims reacted angrily to the acquittal.\n" +
+                    "They appeared stunned when the verdict was read out at the end of the lengthy public trial.\n" +
+                    "Danièle Lamy, the president of the association which represents the victims, said the families were \"disgusted\" that their long fight for justice had come to nothing.\n" +
+                    "\"All that remains of these 14 years of waiting is despair, dismay and anger,\" Ms Lamy said.\n" +
+                    "Claire Durousseau, whose niece died in the crash, said the verdict was a severe blow to those left behind: \"Our lost ones have died a second time. I feel sick.\"\n" +
+                    "It was the first trial for corporate involuntary manslaughter to be held in France.\n" +
+                    "Air France and Airbus had always denied the charges, for which they were facing a maximum fine of €225,000 (£200,000; \$247,000).\n",
+             "https://us.123rf.com/450wm/arthonmeekodong/arthonmeekodong2011/arthonmeekodong201100103/159303909-hand-holding-trees-on-blurred-green-nature-background-replacement-tree-planting-idea-deforestation.jpg?ver=6",
             "2h ago",
-            "newstest item 2"
+            "newstest item 2",
+            "Sudhanshu Dubey",
+            "United Kingdom"
         ),
     )
 
