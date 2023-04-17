@@ -22,6 +22,7 @@ import com.sudhanshu.newsapp.ui.newsfeed.NewsFeedScreen
 import com.sudhanshu.newsapp.ui.newsfeed.NewsFeedViewModel
 import com.sudhanshu.newsapp.ui.theme.NewsAppTheme
 import com.sudhanshu.newsapp.util.Routes
+import com.sudhanshu.newsapp.util.UiEvent
 import com.sudhanshu.newsapp.util.Util
 import dagger.hilt.android.AndroidEntryPoint
 
@@ -29,32 +30,32 @@ import dagger.hilt.android.AndroidEntryPoint
 class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-
         setContent {
             NewsAppTheme {
                 val navController = rememberNavController()
                 NavHost(
-                    navController = navController,  //pass the navCOntroller
-                    startDestination = Routes.NEWS_FEED //tell the starting screen
+                    navController = navController,
+                    startDestination = Routes.NEWS_FEED
                 ) {
                     composable(Routes.NEWS_FEED) {
                         NewsFeedScreen(
                             onNavigate = {
+                                navController.navigate(it.route)
                             }
                         )
                     }
                     composable(
-                        route = Routes.NEWS + "?newsID={${Util.NEWS_ID}}",
+                        route = Routes.NEWS + "?newsJSON={${Util.NEWS_ID}}",
                         arguments = listOf(
                             navArgument(name = Util.NEWS_ID) {
-                                type = NavType.IntType
-                                defaultValue = -1
+                                type = NavType.StringType
+                                defaultValue = "-1"
                             }
                         )
                     ) {
                         NewsScreen(
-                            onNavigate = {
-                                navController.navigate(it.route)
+                            popBackStack = {
+                                navController.popBackStack()
                             }
                         )
                     }

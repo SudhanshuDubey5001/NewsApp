@@ -18,10 +18,14 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.ColorFilter
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.colorResource
+import androidx.compose.ui.text.font.Font
+import androidx.compose.ui.text.font.FontFamily
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
+import com.sudhanshu.newsapp.R
 import com.sudhanshu.newsapp.data.repository.News
+import com.sudhanshu.newsapp.data.repository.newsTest
 import com.sudhanshu.newsapp.util.UiEvent
 import com.sudhanshu.newsapp.util.Util
 import kotlinx.coroutines.flow.collect
@@ -29,12 +33,6 @@ import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.launch
 
-
-data class newsTest(
-    val content: String,
-    val url: String,
-    val age: String,
-)
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -44,12 +42,18 @@ fun NewsFeedScreen(
 ) {
     //trial run--->
     val newsTestList = listOf(
-        newsTest("You got your wife pregnant you son of a bitch",
-        "https://thumbs.dreamstime.com/b/environment-earth-day-hands-trees-growing-seedlings-bokeh-green-background-female-hand-holding-tree-nature-field-gra-130247647.jpg",
-        "1h ago"),
-        newsTest("You will achieve success if you keep your head down and keep moving",
-        "https://us.123rf.com/450wm/arthonmeekodong/arthonmeekodong2011/arthonmeekodong201100103/159303909-hand-holding-trees-on-blurred-green-nature-background-replacement-tree-planting-idea-deforestation.jpg?ver=6",
-        "2h ago"),
+        newsTest(
+            "1",
+            "2",
+            "3",
+            "4"
+        ),
+        newsTest(
+            "You will achieve success if you keep your head down and keep moving",
+            "https://us.123rf.com/450wm/arthonmeekodong/arthonmeekodong2011/arthonmeekodong201100103/159303909-hand-holding-trees-on-blurred-green-nature-background-replacement-tree-planting-idea-deforestation.jpg?ver=6",
+            "2h ago",
+            "newstest item 2"
+        ),
     )
 
 
@@ -92,12 +96,18 @@ fun NewsFeedScreen(
 
             //app bar--------------------------->
             CenterAlignedTopAppBar(
-                title = { Text(text = "NewsApp") },
+                title = {
+                    Text(
+                        text = Util.APP_TITLE,
+                        fontFamily = FontFamily(Font(R.font.abel_regular))
+                    )
+                },
                 navigationIcon = {
                     Icon(
                         imageVector = Icons.Default.List,
                         contentDescription = "back arrow",
-                        tint = Color.White
+                        tint = Color.White,
+                        modifier = Modifier.padding(start = 7.dp, 0.dp, 0.dp, 0.dp)
                     )
                 },
                 colors = TopAppBarDefaults.topAppBarColors(
@@ -118,23 +128,20 @@ fun NewsFeedScreen(
             )
 
             //news feed---------------------->
-
             LazyColumn(modifier = Modifier.fillMaxSize()) {
                 items(newsTestList) {
                     NewsFeeditem(
                         news = it,
-                        modifier = Modifier.padding(10.dp))
+                        modifier = Modifier.padding(10.dp)
+                            .clickable {
+                                viewModel.onNewsFeedEvent(NewsFeedEvents.OnNewsClick(it))
+                            }
+                    )
 //                        modifier = Modifier.clickable {
 //                            viewModel.onNewsFeedEvent(NewsFeedEvents.OnNewsClick(it))
 //                        })
-                    }
+                }
             }
         }
     }
-}
-
-@Preview
-@Composable
-fun PreviewView(){
-    NewsFeedScreen(onNavigate = { UiEvent.navigate ("")})
 }

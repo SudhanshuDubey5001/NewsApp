@@ -1,4 +1,5 @@
 package com.sudhanshu.newsapp.ui.news
 
-class NewsEvent {
+sealed class NewsEvent {
+    object popBackStack: NewsEvent()
 }

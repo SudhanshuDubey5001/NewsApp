@@ -33,7 +33,8 @@ class NewsFeedViewModel @Inject constructor(
     fun onNewsFeedEvent(event: NewsFeedEvents) {
         when (event) {
             is NewsFeedEvents.OnNewsClick -> {
-                sendUiEvents(UiEvent.navigate(Routes.NEWS + "?newsID=" + event.news._id))
+                    Util.log("JSON formed: "+Util.toJson(event.news))
+                sendUiEvents(UiEvent.navigate(Routes.NEWS + "?newsJSON=" + Util.toJson(event.news)))
             }
             NewsFeedEvents.OnRefreshNews -> {
                 sendUiEvents(UiEvent.refreshNews)

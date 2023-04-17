@@ -20,6 +20,7 @@ import coil.compose.AsyncImage
 import com.bumptech.glide.integration.compose.ExperimentalGlideComposeApi
 import com.sudhanshu.newsapp.R
 import com.sudhanshu.newsapp.data.repository.News
+import com.sudhanshu.newsapp.data.repository.newsTest
 
 @Composable
 fun NewsFeeditem(
