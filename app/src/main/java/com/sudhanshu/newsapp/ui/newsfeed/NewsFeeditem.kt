@@ -15,11 +15,13 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import coil.compose.AsyncImage
 import com.sudhanshu.newsapp.R
-import com.sudhanshu.newsapp.data.repository.newsTest
+import com.sudhanshu.newsapp.data.repository.News
+import com.sudhanshu.newsapp.util.Util
+import java.util.*
 
 @Composable
 fun NewsFeeditem(
-    news: newsTest,
+    news: News,
     modifier: Modifier
 ) {
     Card(
@@ -29,36 +31,46 @@ fun NewsFeeditem(
         colors = CardDefaults.cardColors(Color.White)
     ) {
         Column() {
-            AsyncImage(
-                model = news.url,
-                contentDescription = "media image",
-                modifier = Modifier.fillMaxSize(),
-                contentScale = ContentScale.Crop,
-                error = painterResource(id = R.drawable.imageplaceholder)
-            )
-            Row (modifier = Modifier.padding(12.dp)){
-                Text(
-                    text = news.age + " | ",
-                    fontSize = 12.sp,
-                    color = Color.Black,
-                    fontFamily = FontFamily(Font(R.font.inter_regular))
+            news.media.let {
+                AsyncImage(
+                    model = it,
+                    contentDescription = "media image",
+                    modifier = Modifier.fillMaxSize(),
+                    contentScale = ContentScale.Crop,
+                    error = painterResource(id = R.drawable.imageplaceholder)
                 )
-
+            }
+            Row(modifier = Modifier.padding(12.dp)) {
+                news.published_date.let {
+                    Text(
+                        text = it + " | ",
+                        fontSize = 12.sp,
+                        color = Color.Black,
+                        fontFamily = FontFamily(Font(R.font.inter_regular))
+                    )
+                }
                 Text(
-                    text = "Africa",
+                    text = Util.getCountryName(news.country),
                     fontSize = 12.sp,
                     color = MaterialTheme.colorScheme.tertiary,
                     fontFamily = FontFamily(Font(R.font.inter_regular))
                 )
             }
-            Text(
-                modifier = Modifier.padding(start = 12.dp, top = 0.dp, end = 12.dp, bottom = 12.dp),
-                text = news.excerpt,
-                fontSize = 20.sp,
-                color = Color.Black,
-                fontFamily = FontFamily(Font(R.font.abel_regular)),
-                fontWeight = FontWeight.Bold
-            )
+            news.title?.let {
+                Text(
+                    modifier = Modifier.padding(
+                        start = 12.dp,
+                        top = 0.dp,
+                        end = 12.dp,
+                        bottom = 12.dp
+                    ),
+                    text = it,
+                    fontSize = 20.sp,
+                    color = Color.Black,
+                    fontFamily = FontFamily(Font(R.font.abel_regular)),
+                    fontWeight = FontWeight.Bold
+                )
+            }
             Spacer(modifier = Modifier.height(7.dp))
         }
     }

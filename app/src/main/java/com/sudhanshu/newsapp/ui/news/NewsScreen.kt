@@ -79,7 +79,7 @@ fun NewsScreen(
             ) {
                 //Image-------------------->
                 AsyncImage(
-                    model = viewModel.newsObj?.url,
+                    model = viewModel.newsObj?.media,
                     contentDescription = "news related image",
                     modifier = Modifier
                         .fillMaxSize(),
@@ -91,7 +91,7 @@ fun NewsScreen(
                 val padding = 12.dp
                 val bottomPadding = 9.dp
                 Text(
-                    text = viewModel.newsObj?.excerpt!!,
+                    text = viewModel.newsObj?.title!!,
                     fontSize = 27.sp,
                     fontFamily = FontFamily(Font(R.font.domine_regular)),
                     fontWeight = FontWeight.Bold,
@@ -108,24 +108,26 @@ fun NewsScreen(
                 )
                 Row {
                     Text(
-                        text = viewModel.newsObj.age + " | ",
+                        text = viewModel.newsObj.published_date + " | ",
                         fontSize = 14.sp,
                         color = Color.Black,
                         modifier = Modifier.padding(padding, 0.dp, 0.dp, bottomPadding)
                     )
                     Text(
-                        text = viewModel.newsObj.country,
+                        text = Util.getCountryName(viewModel.newsObj.country),
                         fontSize = 14.sp,
                         color = MaterialTheme.colorScheme.tertiary,
                         modifier = Modifier.padding(0.dp, 0.dp, padding, bottomPadding)
                     )
                 }
-                Text(
-                    text = viewModel.newsObj.summary,
-                    fontSize = 19.sp,
-                    color = Color.Black,
-                    modifier = Modifier.padding(padding, 0.dp, padding, 0.dp)
-                )
+                viewModel.newsObj.summary?.let { it1 ->
+                    Text(
+                        text = it1,
+                        fontSize = 19.sp,
+                        color = Color.Black,
+                        modifier = Modifier.padding(padding, 0.dp, padding, 0.dp)
+                    )
+                }
             }
 
         }

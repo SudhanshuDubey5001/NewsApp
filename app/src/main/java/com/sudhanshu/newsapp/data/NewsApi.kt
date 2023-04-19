@@ -6,6 +6,7 @@ import retrofit2.Response
 import retrofit2.http.GET
 import retrofit2.http.Headers
 import retrofit2.http.Path
+import retrofit2.http.Query
 
 interface NewsApi {
     @Headers("x-api-key: " + Util.APIKEY)
@@ -13,14 +14,13 @@ interface NewsApi {
     suspend fun getDeafaultNews(): Response<NewsBase>
 
     @Headers("x-api-key: " + Util.APIKEY)
-    @GET(Util.endpoint_latest_headlines + "?lang=en")
-    suspend fun getInternationalNews(): Response<NewsBase>
+    @GET(Util.endpoint_latest_headlines)
+    suspend fun getTopicNews(
+        @Query("topic") topic: String,
+        @Query("lang") language: String
+    ): Response<NewsBase>
 
     @Headers("x-api-key: " + Util.APIKEY)
-    @GET(Util.endpoint_latest_headlines + "?lang=en&topic={topic}")
-    suspend fun getTopicNews(@Path("topic") topic: String): Response<NewsBase>
-
-    @Headers("x-api-key: " + Util.APIKEY)
-    @GET(Util.endpoint_search + "?q={query}&lang=en")
-    suspend fun performSearchQuery(@Path("query") query: String): Response<NewsBase>
+    @GET(Util.endpoint_search + "lang=en")
+    suspend fun performSearchQuery(@Query("query") query: String): Response<NewsBase>
 }

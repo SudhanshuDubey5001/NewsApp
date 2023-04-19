@@ -8,6 +8,7 @@ import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.*
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
@@ -18,6 +19,9 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.hilt.navigation.compose.hiltViewModel
+import androidx.lifecycle.viewModelScope
+import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavType
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
@@ -26,9 +30,13 @@ import androidx.navigation.navArgument
 import com.sudhanshu.newsapp.R
 import com.sudhanshu.newsapp.ui.NavDrawerItems
 import com.sudhanshu.newsapp.ui.news.NewsScreen
+import com.sudhanshu.newsapp.ui.newsfeed.NewsFeedEvents
 import com.sudhanshu.newsapp.ui.newsfeed.NewsFeedScreen
+import com.sudhanshu.newsapp.ui.newsfeed.NewsFeedViewModel
 import com.sudhanshu.newsapp.util.Routes
 import com.sudhanshu.newsapp.util.Util
+import kotlinx.coroutines.coroutineScope
+import kotlinx.coroutines.launch
 
 @Composable
 fun MainCompose() {
@@ -36,7 +44,7 @@ fun MainCompose() {
     ModalNavigationDrawer(
         drawerState = drawerState,
         drawerContent = {
-            NavDrawerContents()
+            NavDrawerContents(drawerState)
         },
     ) {
         val navController = rememberNavController()
@@ -131,93 +139,115 @@ fun NavigationDrawerBody(
     }
 }
 
-@Preview
 @Composable
-fun NavDrawerContents() {
+fun NavDrawerContents(
+    drawerState: DrawerState,
+    viewModel: NewsFeedViewModel = hiltViewModel()
+) {
+    val scope = rememberCoroutineScope()
     NavigationDrawerBody(
         items = listOf(
             NavDrawerItems(
+                id = "news",
                 title = "News",
                 icon = painterResource(id = R.drawable.news),
                 description = "Show news"
             ),
             NavDrawerItems(
+                id = "sports",
                 title = "Sports",
                 icon = painterResource(id = R.drawable.sports),
                 description = "Show news"
             ),
             NavDrawerItems(
+                id = "tech",
                 title = "Technology",
                 icon = painterResource(id = R.drawable.technology),
                 description = "Show news"
             ),
             NavDrawerItems(
+                id = "world",
                 title = "International",
                 icon = painterResource(id = R.drawable.international),
                 description = "Show news"
             ),
             NavDrawerItems(
+                id = "finance",
                 title = "Finance",
                 icon = painterResource(id = R.drawable.finance),
                 description = "Show news"
             ),
             NavDrawerItems(
+                id = "politics",
                 title = "Politics",
                 icon = painterResource(id = R.drawable.politics),
                 description = "Show news"
             ),
             NavDrawerItems(
+                id = "business",
                 title = "Business",
                 icon = painterResource(id = R.drawable.business),
                 description = "Show news"
             ),
             NavDrawerItems(
+                id = "economics",
                 title = "Economics",
                 icon = painterResource(id = R.drawable.economics),
                 description = "Show news"
             ),
             NavDrawerItems(
+                id = "entertainment",
                 title = "Entertainment",
                 icon = painterResource(id = R.drawable.entertainment),
                 description = "Show news"
             ),
             NavDrawerItems(
+                id = "beauty",
                 title = "Beauty",
                 icon = painterResource(id = R.drawable.beauty),
                 description = "Show news"
             ),
             NavDrawerItems(
+                id = "travel",
                 title = "Travel",
                 icon = painterResource(id = R.drawable.travel),
                 description = "Show news"
             ),
             NavDrawerItems(
+                id = "music",
                 title = "Music",
                 icon = painterResource(id = R.drawable.music),
                 description = "Show news"
             ),
             NavDrawerItems(
+                id = "food",
                 title = "Food",
                 icon = painterResource(id = R.drawable.food),
                 description = "Show news"
             ),
             NavDrawerItems(
+                id = "science",
                 title = "Science",
                 icon = painterResource(id = R.drawable.science),
                 description = "Show news"
             ),
             NavDrawerItems(
+                id = "gaming",
                 title = "Gaming",
                 icon = painterResource(id = R.drawable.gaming),
                 description = "Show news"
             ),
             NavDrawerItems(
+                id = "energy",
                 title = "Energy",
                 icon = painterResource(id = R.drawable.energy),
                 description = "Show news"
             ),
         ),
         itemClick = {
-            // TODO:
+            scope.launch {
+                drawerState.close()
+            }
+            viewModel.onNewsFeedEvent(NewsFeedEvents.OnNavigationDrawerItemClicked(it.id))
         })
 }

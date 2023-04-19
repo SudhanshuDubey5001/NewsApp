@@ -13,10 +13,4 @@ sealed class UiEvent {
         val content: String,
         val action: String? = null
     ) : UiEvent()
-
-    //refresh screen to get latest news
-    object refreshNews: UiEvent()
-
-    //navigation drawer
-    object navigationDrawer: UiEvent()
 }
