@@ -5,6 +5,7 @@ import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
+import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.*
 import androidx.compose.runtime.Composable
@@ -33,6 +34,7 @@ import com.sudhanshu.newsapp.ui.news.NewsScreen
 import com.sudhanshu.newsapp.ui.newsfeed.NewsFeedEvents
 import com.sudhanshu.newsapp.ui.newsfeed.NewsFeedScreen
 import com.sudhanshu.newsapp.ui.newsfeed.NewsFeedViewModel
+import com.sudhanshu.newsapp.ui.newsfeed.progressLoader
 import com.sudhanshu.newsapp.util.Routes
 import com.sudhanshu.newsapp.util.Util
 import kotlinx.coroutines.coroutineScope
@@ -48,6 +50,7 @@ fun MainCompose() {
         },
     ) {
         val navController = rememberNavController()
+        val listState = rememberLazyListState()
         NavHost(
             navController = navController,
             startDestination = Routes.NEWS_FEED
@@ -57,7 +60,8 @@ fun MainCompose() {
                     onNavigate = {
                         navController.navigate(it.route)
                     },
-                    drawerState = drawerState
+                    drawerState = drawerState,
+                    listState = listState
                 )
             }
             composable(
@@ -79,6 +83,21 @@ fun MainCompose() {
     }
 }
 
+@Composable
+fun progressHUD(){
+    if (progressLoader.value) {
+        Column(
+            modifier = Modifier
+                .fillMaxSize()
+                .fillMaxHeight()
+                .fillMaxWidth(),
+            verticalArrangement = Arrangement.Center,
+            horizontalAlignment = Alignment.CenterHorizontally
+        ) {
+            CircularProgressIndicator()
+        }
+    }
+}
 
 @Composable
 fun NavigationDrawerBody(

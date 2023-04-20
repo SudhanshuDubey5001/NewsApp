@@ -1,5 +1,6 @@
 package com.sudhanshu.newsapp.ui.newsfeed
 
+import androidx.compose.runtime.*
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.sudhanshu.newsapp.data.ApiCallEvents
@@ -16,13 +17,17 @@ import retrofit2.HttpException
 import java.io.IOException
 import javax.inject.Inject
 
+//recomposition is not happening when i put these inside viewmodel
+private var _newsList = MutableStateFlow(listOf<News>())
+val newsList = _newsList.asStateFlow()
+
+var progressLoader = mutableStateOf(false)
+    private set
+
 @HiltViewModel
 class NewsFeedViewModel @Inject constructor(
     private val newsApi: NewsApi
 ) : ViewModel() {
-
-    private var _newsList = MutableStateFlow(listOf<News>())
-    val newsList = _newsList.asStateFlow()
 
     private val _uiEvent = MutableSharedFlow<UiEvent>()
     val uiEvent = _uiEvent.asSharedFlow()
@@ -47,20 +52,23 @@ class NewsFeedViewModel @Inject constructor(
             }
             is NewsFeedEvents.OnNavigationDrawerItemClicked -> {
                 safety = true
-                OnApiCall(ApiCallEvents.getTopicNews(event.topic))
+                //todo: change the "tech" here later---------->
+                OnApiCall(ApiCallEvents.getTopicNews("tech"))
             }
         }
     }
 
     fun OnApiCall(event: ApiCallEvents) {
+        progressLoader.value = true
         when (event) {
             ApiCallEvents.getLatestNews -> {
                 viewModelScope.launch(Dispatchers.IO) {
-                    getNews(Util.LATEST_NEWS,"")
+                    getNews(Util.LATEST_NEWS, "")
                 }
             }
             is ApiCallEvents.getTopicNews -> {
-                viewModelScope.launch (Dispatchers.IO){
+                safety = true
+                viewModelScope.launch(Dispatchers.IO) {
                     getNews(Util.TOPIC_NEWS, event.topic)
                 }
             }
@@ -70,40 +78,47 @@ class NewsFeedViewModel @Inject constructor(
     suspend fun getNews(id: String, args: String) {
         if (safety) {
             safety = false
-            Util.log("Fetching latest news.....")
             val response = try {
                 if (id.equals(Util.LATEST_NEWS)) {
+                    Util.log("Fetching default news.....")
                     newsApi.getDeafaultNews()
+//                    newsApi._getdefaultNews()
                 } else {
-                    newsApi.getTopicNews("en", args!!)
+                    Util.log("Fetching topic news.....")
+                    newsApi.getTopicNews(args, "en")
+//                    newsApi._getTopicNews()
                 }
             } catch (e: IOException) {
-                Util.log(e.toString())
+                Util.log("IO exception:::" + e.toString())
+                progressLoader.value = false
                 return
             } catch (e: HttpException) {
-                Util.log(e.toString())
+                Util.log("HTTP exception" + e.toString())
                 sendUiEvents(
                     UiEvent.showSnackbar(
                         content = "Check internet connection",
                         action = "Retry"
                     )
                 )
+                progressLoader.value = false
                 return
             }
 
             if (response.isSuccessful && response.body() != null) {
+                progressLoader.value = false
                 val newsBase = response.body()!!
-                Util.log("TOpic news = " + response.body().toString())
-                //start on fresh list
-//                _newsList = MutableStateFlow(emptyList())
+//                Util.log("Response = " + response.body().toString())
+
                 //remove elements which doesn't have following attributes
-                _newsList.value = _newsList.value.filter {
+                newsBase.articles = newsBase.articles.filter {
                     it.title != null &&
                             it.excerpt != null &&
                             it.summary != null &&
                             it.media != null
                 }
+                Util.log("Emitting values now....")
                 _newsList.emit(newsBase.articles)
+
             } else {
                 Util.log("Error occured::" + response.message().toString())
                 Util.log("Error raw::" + response.raw().toString())
@@ -113,6 +128,7 @@ class NewsFeedViewModel @Inject constructor(
                         action = "Retry"
                     )
                 )
+                progressLoader.value = false
             }
         }
     }

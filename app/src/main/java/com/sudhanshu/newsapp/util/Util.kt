@@ -1,13 +1,19 @@
 package com.sudhanshu.newsapp.util
 
+import android.text.format.DateUtils
 import android.util.Log
 import com.google.gson.Gson
 import com.sudhanshu.newsapp.data.repository.News
-import java.util.Locale
+import java.text.SimpleDateFormat
+import java.util.*
+
 
 object Util {
     const val APIKEY = "VAVVzTYsFm9B11qlWXFNWJ0shU97xU560T7t1IOXiJc"
-    const val baseURL = "https://api.newscatcherapi.com/"
+//    const val baseURL = "https://api.newscatcherapi.com/"
+    //test----->
+//    const val baseURL = "https://retoolapi.dev/"
+    const val baseURL = "https://newsapitest.free.beeceptor.com"
 
     const val endpoint_latest_headlines = "v2/latest_headlines"
     const val endpoint_search = "v2/search"
@@ -27,5 +33,8 @@ object Util {
 
     //for getting country names from ISO-3166 ->
     fun getCountryName(code: String): String = Locale("", code).getDisplayCountry()
+
+    //change date and time to "x hours ago"
+
 
 }

@@ -6,5 +6,5 @@ data class NewsBase(
     val status: String,
     val total_hits: Int,
     val total_pages: Int,
-    val articles: List<News>
+    var articles: List<News>
 )
