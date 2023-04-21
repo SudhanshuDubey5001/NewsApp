@@ -43,7 +43,7 @@ fun NewsFeeditem(
             Row(modifier = Modifier.padding(12.dp)) {
                 news.published_date.let {
                     Text(
-                        text = it + " | ",
+                        text = Util.getTimeAgo(it!!) + " | ",
                         fontSize = 12.sp,
                         color = Color.Black,
                         fontFamily = FontFamily(Font(R.font.inter_regular))
