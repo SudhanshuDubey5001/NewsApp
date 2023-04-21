@@ -4,6 +4,7 @@ import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.lazy.LazyListState
 import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.foundation.shape.RoundedCornerShape
@@ -43,14 +44,14 @@ import kotlinx.coroutines.launch
 @Composable
 fun MainCompose() {
     val drawerState = rememberDrawerState(initialValue = DrawerValue.Closed)
+    val listState = rememberLazyListState()
     ModalNavigationDrawer(
         drawerState = drawerState,
         drawerContent = {
-            NavDrawerContents(drawerState)
+            NavDrawerContents(drawerState, listState)
         },
     ) {
         val navController = rememberNavController()
-        val listState = rememberLazyListState()
         NavHost(
             navController = navController,
             startDestination = Routes.NEWS_FEED
@@ -84,7 +85,7 @@ fun MainCompose() {
 }
 
 @Composable
-fun progressHUD(){
+fun progressHUD() {
     if (progressLoader.value) {
         Column(
             modifier = Modifier
@@ -161,6 +162,7 @@ fun NavigationDrawerBody(
 @Composable
 fun NavDrawerContents(
     drawerState: DrawerState,
+    listState: LazyListState,
     viewModel: NewsFeedViewModel = hiltViewModel()
 ) {
     val scope = rememberCoroutineScope()
@@ -268,5 +270,9 @@ fun NavDrawerContents(
                 drawerState.close()
             }
             viewModel.onNewsFeedEvent(NewsFeedEvents.OnNavigationDrawerItemClicked(it.id))
+            //to scroll to top item after the click
+            scope.launch {
+                listState.scrollToItem(0)
+            }
         })
 }
