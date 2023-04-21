@@ -103,7 +103,7 @@ class NewsFeedViewModel @Inject constructor(
                     }
                     Util.SEARCH_NEWS -> {
                         Util.log("Fetching search news.....")
-                        response = newsApi.performSearchQuery(args)
+                        response = newsApi.performSearchQuery(args,"en")
                     }
                     else -> {}
                 }

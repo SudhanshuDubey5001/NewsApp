@@ -22,8 +22,11 @@ interface NewsApi {
     ): Response<NewsBase>
 
     @Headers("x-api-key: " + Util.APIKEY)
-    @GET(Util.endpoint_search + "lang=en")
-    suspend fun performSearchQuery(@Query("query") query: String): Response<NewsBase>
+    @GET(Util.endpoint_search)
+    suspend fun performSearchQuery(
+        @Query("q") query: String,
+        @Query("lang") lang: String
+    ): Response<NewsBase>
 
 
     /** Test API **/

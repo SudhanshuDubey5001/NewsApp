@@ -11,7 +11,7 @@ import java.util.*
 
 
 object Util {
-    const val APIKEY = "VAVVzTYsFm9B11qlWXFNWJ0shU97xU560T7t1IOXiJc"
+    const val APIKEY = "lCRxq5i4wyr62v7kc1bpb6nBierhGr5dHtHY9GrXTD0"
 
         const val baseURL = "https://api.newscatcherapi.com/"
     //test----->
