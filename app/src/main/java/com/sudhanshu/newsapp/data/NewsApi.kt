@@ -10,11 +10,11 @@ import retrofit2.http.Path
 import retrofit2.http.Query
 
 interface NewsApi {
-//    @Headers("x-api-key: " + Util.APIKEY)
+    @Headers("x-api-key: " + Util.APIKEY)
     @GET(Util.endpoint_latest_headlines + "?lang=en&countries=UK")
     suspend fun getDeafaultNews(): Response<NewsBase>
 
-//    @Headers("x-api-key: " + Util.APIKEY)
+    @Headers("x-api-key: " + Util.APIKEY)
     @GET(Util.endpoint_latest_headlines)
     suspend fun getTopicNews(
         @Query("topic") topic: String,

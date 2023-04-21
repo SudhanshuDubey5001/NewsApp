@@ -13,10 +13,10 @@ import java.util.*
 object Util {
     const val APIKEY = "VAVVzTYsFm9B11qlWXFNWJ0shU97xU560T7t1IOXiJc"
 
-    //    const val baseURL = "https://api.newscatcherapi.com/"
+        const val baseURL = "https://api.newscatcherapi.com/"
     //test----->
 //    const val baseURL = "https://retoolapi.dev/"
-    const val baseURL = "https://newsapitest.free.beeceptor.com"
+//    const val baseURL = "https://newsapitest.free.beeceptor.com"
 
     const val endpoint_latest_headlines = "v2/latest_headlines"
     const val endpoint_search = "v2/search"
@@ -26,6 +26,7 @@ object Util {
 
     const val LATEST_NEWS = "latest_news"
     const val TOPIC_NEWS = "topic_news"
+    const val SEARCH_NEWS = "search_news"
 
     fun log(s: String) = Log.d("mylog", s)
 

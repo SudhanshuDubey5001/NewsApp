@@ -14,6 +14,7 @@ import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.*
 import kotlinx.coroutines.flow.*
 import retrofit2.HttpException
+import retrofit2.Response
 import java.io.IOException
 import javax.inject.Inject
 
@@ -22,6 +23,9 @@ private var _newsList = MutableStateFlow(listOf<News>())
 val newsList = _newsList.asStateFlow()
 
 var progressLoader = mutableStateOf(false)
+    private set
+
+var searchDialogBoxState = mutableStateOf(false)
     private set
 
 @HiltViewModel
@@ -47,8 +51,8 @@ class NewsFeedViewModel @Inject constructor(
             NewsFeedEvents.OnRefreshNews -> {
 
             }
-            NewsFeedEvents.OnSearchNewsClick -> {
-                sendUiEvents(UiEvent.navigate(Routes.NEWS_SEARCH))
+            is NewsFeedEvents.OnSearchNewsClick -> {
+                OnApiCall(ApiCallEvents.getQueryNews(event.query))
             }
             is NewsFeedEvents.OnNavigationDrawerItemClicked -> {
                 safety = true
@@ -72,22 +76,66 @@ class NewsFeedViewModel @Inject constructor(
                     getNews(Util.TOPIC_NEWS, event.topic)
                 }
             }
+            is ApiCallEvents.getQueryNews -> {
+                safety = true
+                viewModelScope.launch {
+                    getNews(Util.SEARCH_NEWS, event.query)
+                }
+            }
         }
     }
 
     suspend fun getNews(id: String, args: String) {
         if (safety) {
             safety = false
-            val response = try {
-                if (id.equals(Util.LATEST_NEWS)) {
-                    Util.log("Fetching default news.....")
-                    newsApi.getDeafaultNews()
+            try {
+                var response: Response<NewsBase>? = null
+                when (id) {
+                    Util.LATEST_NEWS -> {
+                        Util.log("Fetching default news.....")
+                        response = newsApi.getDeafaultNews()
 //                    newsApi._getdefaultNews()
-                } else {
-                    Util.log("Fetching topic news.....")
-                    newsApi.getTopicNews(args, "en")
+                    }
+                    Util.TOPIC_NEWS -> {
+                        Util.log("Fetching topic news.....")
+                        response = newsApi.getTopicNews(args, "en")
 //                    newsApi._getTopicNews()
+                    }
+                    Util.SEARCH_NEWS -> {
+                        Util.log("Fetching search news.....")
+                        response = newsApi.performSearchQuery(args)
+                    }
+                    else -> {}
                 }
+
+                if (response != null) {
+                    if (response.isSuccessful && response.body() != null) {
+                        progressLoader.value = false
+                        val newsBase = response.body()!!
+            //                Util.log("Response = " + response.body().toString())
+
+                        //remove elements which doesn't have following attributes
+                        newsBase.articles = newsBase.articles.filter {
+                            it.title != null &&
+                                    it.excerpt != null &&
+                                    it.summary != null &&
+                                    it.media != null
+                        }
+                        Util.log("Emitting values now....")
+                        _newsList.emit(newsBase.articles)
+
+                    } else {
+                        Util.log("Error raw::" + response.raw().toString())
+                        sendUiEvents(
+                            UiEvent.showSnackbar(
+                                content = "Check internet connection",
+                                action = "Retry"
+                            )
+                        )
+                        progressLoader.value = false
+                    }
+                }
+
             } catch (e: IOException) {
                 Util.log("IO exception:::" + e.toString())
                 progressLoader.value = false
@@ -102,33 +150,6 @@ class NewsFeedViewModel @Inject constructor(
                 )
                 progressLoader.value = false
                 return
-            }
-
-            if (response.isSuccessful && response.body() != null) {
-                progressLoader.value = false
-                val newsBase = response.body()!!
-//                Util.log("Response = " + response.body().toString())
-
-                //remove elements which doesn't have following attributes
-                newsBase.articles = newsBase.articles.filter {
-                    it.title != null &&
-                            it.excerpt != null &&
-                            it.summary != null &&
-                            it.media != null
-                }
-                Util.log("Emitting values now....")
-                _newsList.emit(newsBase.articles)
-
-            } else {
-                Util.log("Error occured::" + response.message().toString())
-                Util.log("Error raw::" + response.raw().toString())
-                sendUiEvents(
-                    UiEvent.showSnackbar(
-                        content = "Check internet connection",
-                        action = "Retry"
-                    )
-                )
-                progressLoader.value = false
             }
         }
     }

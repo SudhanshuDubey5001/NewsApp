@@ -27,6 +27,7 @@ import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import com.sudhanshu.newsapp.R
 import com.sudhanshu.newsapp.data.repository.News
+import com.sudhanshu.newsapp.ui.SearchDialogBox
 import com.sudhanshu.newsapp.ui.navdrawer.progressHUD
 import com.sudhanshu.newsapp.util.UiEvent
 import com.sudhanshu.newsapp.util.Util
@@ -47,6 +48,7 @@ fun NewsFeedScreen(
     val newsFeed = newsList.collectAsState()
 
     val snackbarHostState = remember { SnackbarHostState() }
+    val dialogBoxState = remember { mutableStateOf(false) }
     val scope = rememberCoroutineScope()
 
     LaunchedEffect(key1 = true) {
@@ -104,12 +106,12 @@ fun NewsFeedScreen(
                 ),
                 actions = {
                     IconButton(onClick = {
-//                        viewModel.onNewsFeedEvent(NewsFeedEvents.OnSearchNewsClick)
+                        searchDialogBoxState.value = true
                     }) {
                         Icon(
                             imageVector = Icons.Default.Search,
                             contentDescription = "search icon",
-                            tint = Color.White
+                            tint = Color.White,
                         )
                     }
                 }
@@ -134,6 +136,7 @@ fun NewsFeedScreen(
                     }
                 }
                 progressHUD()
+                SearchDialogBox()
             }
         }
     }

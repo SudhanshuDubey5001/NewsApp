@@ -8,7 +8,7 @@ sealed class NewsFeedEvents {
 
     object OnRefreshNews: NewsFeedEvents()
 
-    object OnSearchNewsClick: NewsFeedEvents()
+    data class OnSearchNewsClick(val query: String): NewsFeedEvents()
 
     data class OnNavigationDrawerItemClicked(val topic: String): NewsFeedEvents()
 
