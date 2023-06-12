@@ -57,7 +57,7 @@ class NewsFeedViewModel @Inject constructor(
             is NewsFeedEvents.OnNavigationDrawerItemClicked -> {
                 safety = true
                 //todo: change the "tech" here later---------->
-                OnApiCall(ApiCallEvents.getTopicNews("tech"))
+                OnApiCall(ApiCallEvents.getTopicNews(event.topic))
             }
         }
     }
@@ -78,7 +78,7 @@ class NewsFeedViewModel @Inject constructor(
             }
             is ApiCallEvents.getQueryNews -> {
                 safety = true
-                viewModelScope.launch {
+                viewModelScope.launch(Dispatchers.IO) {
                     getNews(Util.SEARCH_NEWS, event.query)
                 }
             }

@@ -82,7 +82,7 @@ fun NewsScreen(
                     model = viewModel.newsObj?.media,
                     contentDescription = "news related image",
                     modifier = Modifier
-                        .fillMaxSize(),
+                        .fillMaxSize(), 
                     contentScale = ContentScale.Crop
                 )
 
