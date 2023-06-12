@@ -12,7 +12,7 @@ Note: I used my own API key from NewsCatcher API, feel free to use yours as it h
 ![screen1](screenshots/screen1.jpeg) ![screen2](screenshots/screen2.jpeg) 
 
 ## Frameworks and Libraries 
-- [MVVM](https://docs.google.com/presentation/d/1WvuQp3kk8gRHLGzpbPfpwRmMyJwId3h6RNvlEaqQIZ4/htmlpresent)
+- [MVVM architecture](https://docs.google.com/presentation/d/1WvuQp3kk8gRHLGzpbPfpwRmMyJwId3h6RNvlEaqQIZ4/htmlpresent)
 - [Coroutines](https://developer.android.com/kotlin/coroutines) and [Flow](https://developer.android.com/kotlin/flow) 
 - [Dagger Hilt Dependency Injection](https://developer.android.com/training/dependency-injection/hilt-android)
 - [Jetpack Compose (Material 3)](https://developer.android.com/jetpack/compose/designsystems/material3)
